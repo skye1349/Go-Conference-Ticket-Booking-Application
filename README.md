@@ -1,37 +1,50 @@
 # Go Conference Ticket Booking Application
 
-This is a simple console-based ticket booking application for a conference written in Go. 
+This is a simple web application written in Go language. It simulates booking tickets for a conference. Users can input their first name, last name, email address, and the number of tickets they wish to purchase.
 
-## Packages Used
+## Feature
 
-The program makes use of the following Go standard library packages:
+1. Form Submission: Users can fill out a form with their first name, last name, email address, and the number of tickets they wish to purchase.
 
-- `fmt`: For console I/O operations, like printing to the console and scanning user input.
+2. Input Validation: The application checks whether the user input is valid, i.e., whether the name is of sufficient length, whether the email contains '@', and whether the number of tickets requested is valid.
 
-- `sync`: Specifically, the `WaitGroup` from the `sync` package is used for managing the ticket sending goroutines. This ensures that the main function waits for all tickets to be sent before terminating the program.
+3. Ticket Booking: If user input is valid, the application proceeds to book the requested number of tickets and reduces the total number of available tickets accordingly.
 
-- `time`: The `time` package is used to simulate the delay in sending the ticket.
+4. Ticket Sending Simulation: The application simulates the process of sending a confirmation email to the user after they have successfully booked their tickets.
 
-## Functionality
+5. Concurrency: The ticket sending simulation is run concurrently using goroutines, providing an asynchronous user experience.
 
-The main functionality of the application is to book tickets for a conference. It achieves this through a series of operations:
+## Packages and Functions Used
 
-1. **Greeting the User**: The application starts by greeting the user and informing them about the total number of tickets and how many are remaining.
+This web application utilizes several built-in packages in the Go standard library:
 
-2. **Getting User Input**: The application then asks the user to enter their first name, last name, email address, and the number of tickets they wish to book.
+- `fmt`: Used for formatted I/O with functions like Println and Printf.
+- `net/http`: Used to set up the HTTP server and handle HTTP requests.
+- `html/template`: Used to parse and execute HTML templates.
+- `sync`: Used for managing concurrent execution with the WaitGroup type.
+- `time`: Used to create delays with Sleep.
 
-3. **Validating User Input**: The application checks if the input entered by the user is valid. For example, it checks if the name is not too short, if the email address contains the "@" symbol, and if the number of tickets entered is valid.
+## Code Details
 
-4. **Booking the Ticket**: If the user's input is valid, the application books the tickets and deducts the booked tickets from the remaining total. It also thanks the user and sends a confirmation message to the console.
+### Data Types and Variables
 
-5. **Sending the Ticket**: A goroutine is started to simulate sending the ticket to the user's email address. This operation is delayed by 50 seconds to simulate the time it takes to send an email.
+- `String Data Type`: Used for storing users' first names, last names, and email addresses.
+- `Integer Data Type`: Used for storing the number of tickets each user wants to book and the remaining number of tickets.
+- `Struct`: The UserData struct is used to store information for each booking. It includes first name, last name, email, and number of tickets.
 
-Please note that this is a simple application and doesn't actually send an email. The "email sending" is simulated and the program only displays a message on the console.
+### Logic Statement
 
-## Data Structures
+- `IF Statement`: Used for validating user input and managing the ticket booking process.
+- `For loop`: Used for iterating over the bookings to get first names.
 
-The application uses an array of a custom `UserData` type to keep track of the bookings. Each booking is stored with the user's first name, last name, email, and the number of booked tickets. The remaining tickets are tracked using a simple unsigned integer.
+### Goroutines
 
-## Concurrency
+- `Goroutines`: Used for simulating sending tickets to users concurrently.
 
-The program makes use of Go's goroutines to simulate the delay in sending tickets. This helps in making the ticket sending operation non-blocking.
+## Dockerfile
+
+The Dockerfile in this project allows you to containerize the application. This involves two stages: building the binary in a temporary container, and copying the built binary into a new, final container to run the application.
+
+1. Build Stage: During this stage, the Go SDK is used to compile the application into a binary file. All Go dependencies are also installed during this stage.
+
+2. Final Stage: In this stage, the built binary file is copied into a new Docker container. This final Docker container is much smaller in size since it doesn't contain the Go SDK or any other build-time dependencies, only the binary file and any other necessary runtime dependencies.
